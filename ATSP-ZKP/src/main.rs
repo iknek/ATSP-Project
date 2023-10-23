@@ -1,32 +1,34 @@
-use bulletproofs::{BulletproofGens, PedersenGens, RangeProof, ProveDlog, TranscriptProtocol};
-use rand_core::OsRng;
+extern crate num_bigint;
+extern crate rand;
+
+use num_bigint::{BigUint, ToBigUint};
 use rand::Rng;
 
 fn main() {
-    // Create a BulletproofGens object with appropriate bit length (16 here).
-    let pc_gens = PedersenGens::default();
-    let bp_gens = BulletproofGens::new(16, 1);
+    // Define prime number and generator
+    let p = BigUint::from(23u32); // A small prime for demonstration
+    let g = BigUint::from(5u32);  // A generator
 
-    // Generate a random value to prove (e.g., 10).
-    let value = 10u64;
+    // Generate a random private key
+    let mut rng = rand::thread_rng();
+    let x = BigUint::from(rng.gen::<u32>()); // Private key
 
-    // Generate a random blinding factor (private key).
-    let blinding_factor = Rng::gen(&mut OsRng);
+    // Compute the public key
+    let y = g.clone().modpow(&x, &p); // Public key
 
-    // Generate a Pedersen commitment to the value.
-    let (commit, commit_proof) = pc_gens.commit(value, blinding_factor);
+    // Prover's side
+    let r = BigUint::from(rng.gen::<u32>()); // Random value
+    let t = g.clone().modpow(&r, &p); // Send t to verifier
+    let c = BigUint::from(rng.gen::<u32>()); // Random challenge
+    let s = r.clone() + &c * &x; // Send s to verifier
 
-    // Create a range proof for the value.
-    let mut trans = TranscriptProtocol::new(b"range_proof_example");
-    let proof = RangeProof::prove_single(&bp_gens, &mut trans, value, blinding_factor, commit, &commit_proof);
+    // Verifier's side
+    let left_side = g.clone().modpow(&s, &p);
+    let right_side = t.clone() * y.clone().modpow(&c, &p) % &p;
 
-    // Verify the range proof.
-    let mut verifier_trans = TranscriptProtocol::new(b"range_proof_example");
-    let verified = proof.verify_single(&bp_gens, &mut verifier_trans, &commit, &commit_proof, 0).is_ok();
-
-    if verified {
-        println!("Range proof verified.");
+    if left_side == right_side {
+        println!("Proof is valid.");
     } else {
-        println!("Range proof verification failed.");
+        println!("Proof is invalid.");
     }
 }
