@@ -55,7 +55,6 @@ fn main() {
     let p = generate_random_prime(bits);
     let g = generate_random_generator(&p);
      */
-
     
 
     // Compute the public key
