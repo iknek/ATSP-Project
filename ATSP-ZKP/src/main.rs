@@ -4,31 +4,47 @@ extern crate rand;
 use num_bigint::{BigUint, ToBigUint};
 use rand::Rng;
 
+mod schnorr_zkp;
+mod prover;
+mod verifier;
+
 fn main() {
+    
+    //schnorr_zkp::run_zkp();
+
+    //schnorr_zkp::run_age_verification(9);
+
+    
+    let private_key = 77; // Replace with the actual age (private key)
+
+    // Convert the private key (age) to a BigUint
+    let x = BigUint::from(private_key);
+
     // Define prime number and generator
     let p = BigUint::from(23u32); // A small prime for demonstration
     let g = BigUint::from(5u32);  // A generator
 
-    // Generate a random private key
-    let mut rng = rand::thread_rng();
-    let x = BigUint::from(rng.gen::<u32>()); // Private key
-
     // Compute the public key
     let y = g.clone().modpow(&x, &p); // Public key
 
-    // Prover's side
-    let r = BigUint::from(rng.gen::<u32>()); // Random value
-    let t = g.clone().modpow(&r, &p); // Send t to verifier
-    let c = BigUint::from(rng.gen::<u32>()); // Random challenge
-    let s = r.clone() + &c * &x; // Send s to verifier
+    
 
-    // Verifier's side
-    let left_side = g.clone().modpow(&s, &p);
-    let right_side = t.clone() * y.clone().modpow(&c, &p) % &p;
+    // Generate a random challenge
+    //let c = BigUint::from(42u32); // Replace with the actual challenge
+    let c = verifier::generate_Challenge();
+    //let c_clone = c.clone();
+    
+    // Prover generates the proof
+    let (t, s) = prover::generate_proof(private_key, c.clone(), p.clone(), g.clone(), y.clone());
+    
+    
 
-    if left_side == right_side {
-        println!("Proof is valid.");
+    // Verifier checks the proof
+    let age_threshold = 18; // Age threshold for verification
+    if verifier::verify_proof(p, g, t, s, y, c.clone(), age_threshold) {
+        println!("Age verification 2: Age is valid and above 18.");
     } else {
-        println!("Proof is invalid.");
+        println!("Age verification 2: Age is invalid or below 18.");
     }
+    
 }

@@ -8,3 +8,9 @@ edition = "2021"
 [dependencies]
 num-bigint = "0.4"
 rand = "0.8"
+curve25519-dalek = "3"
+merlin = "2"
+bulletproofs = "4.0.0"
+bellman = "0.14.0"
+ff = "0.13.0"
+
