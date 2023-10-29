@@ -9,26 +9,9 @@ mod schnorr_zkp;
 mod prover;
 mod verifier;
 
-/*
-fn generate_random_prime(bits: u64) -> BigUint {
-    let mut rng = rand::thread_rng();
-    let prime = num_bigint::BigUint::from_bytes_be(&rng.gen_prime(bits));
-    prime
-}
-
-fn generate_random_generator(p: &BigUint) -> BigUint {
-    let mut rng = rand::thread_rng();
-    let gen = rng.gen_biguint_below(p);
-    gen
-}
- */
 
 
 fn main() {
-    
-    //schnorr_zkp::run_zkp();
-
-    //schnorr_zkp::run_age_verification(9);
 
     println!("Please enter your private key for registration:");
 
@@ -44,7 +27,7 @@ fn main() {
     let x = BigUint::from(private_key);
 
     // Define prime number and generator
-    let p = BigUint::from(23u32); // A small prime for demonstration
+    let p = BigUint::from(397u32); // A prime for demonstration
     //let g = BigUint::from(5u32);  // A generator
     let g = BigUint::from(rand::thread_rng().gen::<u32>()); // Random generator value
     
@@ -82,10 +65,8 @@ fn main() {
     // Prover generates the proof
     let (t, s) = prover::generate_proof(private_key2, c.clone(), p.clone(), g.clone(), y.clone());
     
-    
 
     // Verifier checks the proof
-    //let age_threshold = 18; // Age threshold for verification
     if verifier::verify_proof(p, g, t, s, y, c.clone()) {
         println!("Proof valid - Login successful!");
     } else {
