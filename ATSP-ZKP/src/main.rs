@@ -5,7 +5,6 @@ use num_bigint::{BigUint, ToBigUint};
 use rand::Rng;
 use std::io;
 
-mod schnorr_zkp;
 mod prover;
 mod verifier;
 
