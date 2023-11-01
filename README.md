@@ -1,6 +1,6 @@
 # ZKP Demonstration - Working with AC
 
-This code demonstartes how Zero Knowledge Proof schemes could work with Anonymous Credentials. By implementing the Schnorr Protocol for ZKP we want to show the basic functionality.
+This code demonstrates how Zero Knowledge Proof schemes could work with Anonymous Credentials. By implementing the Schnorr Protocol for ZKP we want to show the basic functionality.
 
 The code can be run from the the ATSP-ZKP directory with Rust installed by running `cargo run`.
 
