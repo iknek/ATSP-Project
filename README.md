@@ -2,7 +2,7 @@
 
 This code demonstrates how Zero Knowledge Proof schemes could work with Anonymous Credentials. By implementing the Schnorr Protocol for ZKP we want to show the basic functionality.
 
-The code can be run from the the ATSP-ZKP directory with Rust installed by running `cargo run`.
+The code can be run from the the ATSP-ZKP directory [ `cd ATSP-ZKP` ] with Rust installed by running `cargo run`.
 
 #### Registration Phase
 Entering a private key (the secret represent as a number) will calculate the public key. In theory this key would be stored on a server.
