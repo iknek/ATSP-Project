@@ -20,26 +20,13 @@ fn main() {
     
     // Parse the input as an integer
     let private_key: u32 = input.trim().parse().expect("Invalid input.");
-    
-    //let private_key = 77; // Replace with the actual age (private key)
 
-    // Convert the private key (age) to a BigUint
     let x = BigUint::from(private_key);
 
     // Define prime number and generator
     let p = BigUint::from(397u32); // A prime for demonstration
-    //let g = BigUint::from(5u32);  // A generator
     let g = BigUint::from(rand::thread_rng().gen::<u32>()); // Random generator value
     
-
-    /*
-    // Generate random prime number and generator
-    let bits = 128; // Adjust the number of bits as needed
-    let p = generate_random_prime(bits);
-    let g = generate_random_generator(&p);
-     */
-    
-
     // Compute the public key
     let y = g.clone().modpow(&x, &p); // Public key
 
